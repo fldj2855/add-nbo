@@ -1,16 +1,18 @@
-#include<stdint.h>
-#include "my_ntohl.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <arpa/inet.h>
 
 int main(int argc, char const *argv[])
 {
 	if(argc != 3)
 	{
 		printf("syntax : %s <file1> <file2>\n", argv[0]);
-		printf("sample : add-nbo a.bin c.bin")
+		printf("sample : add-nbo a.bin c.bin");
 	}
 
 	FILE *file1, *file2;
-	uint32_t bin1, bin2;
+	uint32_t bin1, bin2, res;
 
 	file1 = fopen(argv[1], "rb");
 	file2 = fopen(argv[2], "rb");
@@ -27,14 +29,18 @@ int main(int argc, char const *argv[])
 		exit(-1);
 	}
 
-	fread(bin1, 4, 1, file1);
-	fread(bin2, 4, 1, file2);
+	fread(&bin1, 4, 1, file1);
+	fread(&bin2, 4, 1, file2);
 
 	fclose(file2);
 	fclose(file1);
 
-	bin1 = my_ntohl(bin1);
-	bin2 = my_ntohl(bin2);
+	bin1 = ntohl(bin1);
+	bin2 = ntohl(bin2);
+
+	res = bin1+bin2;
+    printf("%d(%#x) + %d(%#x) = %d(%#x)\n",bin1, bin1, bin2, bin2, res, res);
+
 
 	return 0;
 }
